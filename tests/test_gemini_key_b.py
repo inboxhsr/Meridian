@@ -27,7 +27,7 @@ def test_deepseek_key_responds():
         response = client.chat.completions.create(
             model="deepseek-v4-flash",
             messages=[{"role": "user", "content": "Reply with the single word: OK"}],
-            max_tokens=5,
+            max_tokens=100,  # reasoning model needs budget beyond its thinking phase
         )
     except Exception as exc:
         pytest.fail(
@@ -36,8 +36,12 @@ def test_deepseek_key_responds():
             f"  → Check your key at https://platform.deepseek.com/api_keys"
         )
 
-    answer = response.choices[0].message.content
-    assert answer is not None and answer.strip() != "", (
-        f"DeepSeek returned an empty response.\n"
+    # deepseek-v4-flash is a reasoning model: it may put output in
+    # reasoning_content (thinking phase) rather than content on short prompts.
+    # Accept either field as proof the API is working.
+    content = response.choices[0].message.content or ""
+    reasoning = getattr(response.choices[0].message, "reasoning_content", None) or ""
+    assert content.strip() or reasoning.strip(), (
+        f"DeepSeek returned an empty response in both content and reasoning_content.\n"
         f"  Raw response: {response}"
     )
