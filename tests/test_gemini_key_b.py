@@ -1,37 +1,43 @@
 """
-test_gemini_key_b.py — Sprint 0 test gate
+test_deepseek.py — Sprint 0 test gate
 
-Verifies GEMINI_API_KEY_B works against gemini-2.5-flash.
-KEY_B is used by the Query Rewriter and Critic nodes.
+Verifies DEEPSEEK_API_KEY works against deepseek-chat.
+DeepSeek is used by: Query Rewriter, Grader/Critic, Generator nodes.
 
-SDK: google-genai (replaces deprecated google-generativeai, EOL Nov 2025)
+DeepSeek exposes an OpenAI-compatible API at https://api.deepseek.com
+so we use the openai package with a custom base_url.
 """
 import os
 import pytest
-from google import genai
+from openai import OpenAI
 
 
-def test_gemini_key_b_flash_responds():
-    """Send a minimal prompt to gemini-2.5-flash using KEY_B and expect a response."""
-    api_key = os.environ.get("GEMINI_API_KEY_B")
+def test_deepseek_key_responds():
+    """Send a minimal prompt to deepseek-chat and expect a response."""
+    api_key = os.environ.get("DEEPSEEK_API_KEY")
     if not api_key:
-        pytest.skip("GEMINI_API_KEY_B not set — run test_env.py first")
+        pytest.skip("DEEPSEEK_API_KEY not set — add it to your .env file")
 
-    client = genai.Client(api_key=api_key)
+    client = OpenAI(
+        api_key=api_key,
+        base_url="https://api.deepseek.com",
+    )
 
     try:
-        response = client.models.generate_content(
-            model="gemini-2.5-flash",
-            contents="Reply with the single word: OK",
+        response = client.chat.completions.create(
+            model="deepseek-chat",
+            messages=[{"role": "user", "content": "Reply with the single word: OK"}],
+            max_tokens=5,
         )
     except Exception as exc:
         pytest.fail(
-            f"GEMINI_API_KEY_B failed to get a response from gemini-2.5-flash.\n"
+            f"DEEPSEEK_API_KEY failed to get a response from deepseek-chat.\n"
             f"  Error: {exc}\n"
-            f"  → Check your key is valid at https://aistudio.google.com"
+            f"  → Check your key at https://platform.deepseek.com/api_keys"
         )
 
-    assert response.text is not None and response.text.strip() != "", (
-        f"KEY_B got an empty response from gemini-2.5-flash.\n"
+    answer = response.choices[0].message.content
+    assert answer is not None and answer.strip() != "", (
+        f"DeepSeek returned an empty response.\n"
         f"  Raw response: {response}"
     )

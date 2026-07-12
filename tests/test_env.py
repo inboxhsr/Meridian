@@ -9,13 +9,13 @@ import pytest
 
 
 REQUIRED_VARS = [
-    "GEMINI_API_KEY_A",
-    "GEMINI_API_KEY_B",
-    "GEMINI_API_KEY_C",
-    "GEMINI_EMBEDDING_KEY",
+    "GEMINI_API_KEY_A",       # Gemini Flash — PII Redactor + Router
+    "DEEPSEEK_API_KEY",       # DeepSeek Chat — Query Rewriter + Critic + Generator
+    "GEMINI_EMBEDDING_KEY",   # Gemini Embedding 2 — Embedder
     "MILVUS_HOST",
     "MILVUS_PORT",
 ]
+
 
 
 @pytest.mark.parametrize("var_name", REQUIRED_VARS)

@@ -3,11 +3,12 @@
 # Python 3.11 | Pinned with >= for compatibility
 # ============================================================
 
-# --- Milvus ---
-pymilvus>=2.6.0
-
-# --- Gemini API ---
+# --- Gemini API (PII Redactor + Router + Embedding) ---
 google-genai>=1.0.0
+
+# --- DeepSeek API (Query Rewriter + Critic + Generator) ---
+# DeepSeek uses an OpenAI-compatible API — the openai package handles it
+openai>=1.30.0
 
 # --- Environment ---
 python-dotenv>=1.0.0
