@@ -344,8 +344,12 @@ def _setup_fonts() -> dict:
 
 # ── Content generation via Gemini ────────────────────────────────────────────
 
-def _generate_pdf_text(client, lang: str, title: str, topic: str) -> str:
-    """Call Gemini to write a corporate policy/spec document."""
+def _generate_pdf_text(ds_client, lang: str, title: str, topic: str) -> str:
+    """Call DeepSeek to write a corporate policy/spec document.
+
+    NOTE: Gemini KEY_A is reserved for the runtime pipeline (PII Redactor, Router).
+    All corpus generation goes through DeepSeek to avoid the 20 req/day free-tier cap.
+    """
     lang_name = {"en": "English", "hi": "Hindi (Devanagari script)", "zh": "Simplified Chinese (Mandarin)"}[lang]
     prompt = (
         f"Write a realistic corporate document in {lang_name} for Meridian Global Corp, "
@@ -652,8 +656,9 @@ def main(dry_run: bool = False) -> None:
 
             try:
                 if doc_type == "pdf":
-                    # PDFs use Gemini (structured prose, policy-style content)
-                    content = _generate_pdf_text(gemini_client, lang, title, topic)
+                    # All content generation uses DeepSeek — Gemini KEY_A is
+                    # reserved for the runtime pipeline, not batch generation.
+                    content = _generate_pdf_text(deepseek_client, lang, title, topic)
                     _write_pdf(targets[0][0], title, content, lang, fonts)
                     generated += 1
 
