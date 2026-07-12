@@ -1,0 +1,47 @@
+# ============================================================
+# Meridian — requirements.txt
+# Python 3.11 | Pinned with >= for compatibility
+# ============================================================
+
+# --- Milvus ---
+pymilvus>=2.6.0
+
+# --- Gemini API ---
+google-generativeai>=0.8.0
+
+# --- Environment ---
+python-dotenv>=1.0.0
+
+# --- Agent Framework ---
+langgraph>=0.2.0
+langchain-core>=0.3.0
+
+# --- Reranker (BGE-reranker-v2-m3, int8) ---
+# Install in Sprint 6:
+# FlagEmbedding>=1.2.0
+# sentence-transformers>=3.0.0
+
+# --- Text Processing ---
+jieba>=0.42.1
+spacy>=3.8.0
+pdfminer.six>=20221105
+
+# --- Corpus Generation (Sprint 1) ---
+reportlab>=4.2.0
+Pillow>=10.4.0
+gTTS>=2.5.1
+
+# --- Evaluation (Sprint 9) ---
+# Install in Sprint 9:
+# ragas>=0.2.0
+
+# --- UI (Sprint 10) ---
+# streamlit>=1.38.0
+
+# --- Transcription (Sprint 4) ---
+# Install in Sprint 4:
+# openai-whisper>=20231117
+
+# --- Testing ---
+pytest>=8.3.0
+pytest-asyncio>=0.24.0
