@@ -26,6 +26,7 @@ from dotenv import load_dotenv
 load_dotenv(Path(__file__).parent.parent / ".env")
 
 GEMINI_KEY = os.environ.get("GEMINI_API_KEY_A")
+DEEPSEEK_KEY = os.environ.get("DEEPSEEK_API_KEY")
 CORPUS_DIR = Path(__file__).parent.parent / "corpus"
 
 # ── Document manifest ────────────────────────────────────────────────────────
@@ -363,8 +364,8 @@ def _generate_pdf_text(client, lang: str, title: str, topic: str) -> str:
     return resp.text.strip()
 
 
-def _generate_slide_texts(client, title: str, topic: str, n_slides: int) -> list[dict]:
-    """Call Gemini to create structured slide content. Returns list of {title, bullets}."""
+def _generate_slide_texts(ds_client, title: str, topic: str, n_slides: int) -> list[dict]:
+    """Call DeepSeek to create structured slide content. Returns list of {title, bullets}."""
     prompt = (
         f"Create content for a {n_slides}-slide corporate presentation in English "
         f"for Meridian Global Corp.\n\n"
@@ -372,35 +373,43 @@ def _generate_slide_texts(client, title: str, topic: str, n_slides: int) -> list
         f"Topic details: {topic}\n\n"
         f"Format each slide EXACTLY as:\n"
         f"SLIDE N: [slide title]\n"
-        f"• [bullet — max 15 words, include specific numbers/dates]\n"
-        f"• [bullet]\n"
-        f"• [bullet]\n"
-        f"• [bullet]\n\n"
+        f"\u2022 [bullet \u2014 max 15 words, include specific numbers/dates]\n"
+        f"\u2022 [bullet]\n"
+        f"\u2022 [bullet]\n\n"
         f"Rules:\n"
         f"- Exactly {n_slides} slides\n"
         f"- 3 to 5 bullets per slide\n"
-        f"- No long paragraphs — bullets only\n"
+        f"- No long paragraphs \u2014 bullets only\n"
         f"- Include specific metrics wherever possible"
     )
-    resp = client.models.generate_content(model="gemini-2.5-flash", contents=prompt)
-    return _parse_slides(resp.text.strip(), n_slides)
+    resp = ds_client.chat.completions.create(
+        model="deepseek-v4-flash",
+        messages=[{"role": "user", "content": prompt}],
+        max_tokens=1000,
+    )
+    text = resp.choices[0].message.content or ""
+    return _parse_slides(text.strip(), n_slides)
 
 
-def _generate_audio_text(client, title: str, topic: str) -> str:
-    """Call Gemini to write a speech script for TTS."""
+def _generate_audio_text(ds_client, title: str, topic: str) -> str:
+    """Call DeepSeek to write a speech script for TTS."""
     prompt = (
         f"Write a 60-90 second spoken speech in natural English for a corporate audio recording.\n\n"
         f"Title: {title}\n"
         f"Content to cover: {topic}\n\n"
         f"Requirements:\n"
-        f"- Write as spoken word — natural, warm, professional\n"
+        f"- Write as spoken word \u2014 natural, warm, professional\n"
         f"- No stage directions, no [pause], no formatting\n"
         f"- Approximately 150 to 200 words\n"
-        f"- Do not start with 'Hello' or 'Hi' — begin directly\n"
+        f"- Do not start with 'Hello' or 'Hi' \u2014 begin directly\n"
         f"- Output only the speech text, nothing else"
     )
-    resp = client.models.generate_content(model="gemini-2.5-flash", contents=prompt)
-    return resp.text.strip()
+    resp = ds_client.chat.completions.create(
+        model="deepseek-v4-flash",
+        messages=[{"role": "user", "content": prompt}],
+        max_tokens=400,
+    )
+    return (resp.choices[0].message.content or "").strip()
 
 
 def _parse_slides(text: str, n_slides: int) -> list[dict]:
@@ -587,9 +596,15 @@ def main(dry_run: bool = False) -> None:
     if not GEMINI_KEY:
         print("ERROR: GEMINI_API_KEY_A not set in .env")
         sys.exit(1)
+    if not DEEPSEEK_KEY:
+        print("ERROR: DEEPSEEK_API_KEY not set in .env")
+        sys.exit(1)
 
     from google import genai
-    client = genai.Client(api_key=GEMINI_KEY)
+    from openai import OpenAI
+
+    gemini_client = genai.Client(api_key=GEMINI_KEY)
+    deepseek_client = OpenAI(api_key=DEEPSEEK_KEY, base_url="https://api.deepseek.com")
 
     if not dry_run:
         fonts = _setup_fonts()
@@ -637,22 +652,25 @@ def main(dry_run: bool = False) -> None:
 
             try:
                 if doc_type == "pdf":
-                    content = _generate_pdf_text(client, lang, title, topic)
+                    # PDFs use Gemini (structured prose, policy-style content)
+                    content = _generate_pdf_text(gemini_client, lang, title, topic)
                     _write_pdf(targets[0][0], title, content, lang, fonts)
                     generated += 1
 
                 elif doc_type == "slides":
-                    slides = _generate_slide_texts(client, title, topic, doc.get("n_slides", 5))
+                    # Slides use DeepSeek (avoids Gemini 20 req/day free-tier cap)
+                    slides = _generate_slide_texts(deepseek_client, title, topic, doc.get("n_slides", 5))
                     for i, (path, _) in enumerate(targets):
                         _write_slide(path, title, slides[i], i + 1, len(targets))
                     generated += len(targets)
 
                 elif doc_type == "audio":
-                    speech = _generate_audio_text(client, title, topic)
+                    # Audio scripts use DeepSeek for same reason
+                    speech = _generate_audio_text(deepseek_client, title, topic)
                     _write_audio(targets[0][0], speech)
                     generated += 1
 
-                # Polite rate limiting — 1 API call per doc, free tier is ~15 RPM
+                # Polite rate limiting
                 time.sleep(1.5)
 
             except Exception as e:

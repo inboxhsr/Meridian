@@ -32,7 +32,10 @@ FILE_PATTERN = re.compile(
 def _all_corpus_files() -> list[Path]:
     if not CORPUS_DIR.exists():
         return []
-    return [f for f in CORPUS_DIR.rglob("*") if f.is_file()]
+    return [
+        f for f in CORPUS_DIR.rglob("*")
+        if f.is_file() and not f.name.startswith(".")
+    ]
 
 
 def test_corpus_directory_exists():
