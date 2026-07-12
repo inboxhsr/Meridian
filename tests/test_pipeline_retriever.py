@@ -30,8 +30,6 @@ def milvus_ready():
 
 def test_retrieve_returns_list(milvus_ready):
     from pipeline.retriever import retrieve
-    results = retrieve("expense reimbursement policy", top_k=3, skip_pii=True if False else False)
-    # retrieve() doesn't have skip_pii; just call it directly
     results = retrieve("expense reimbursement policy", top_k=3)
     assert isinstance(results, list)
 
