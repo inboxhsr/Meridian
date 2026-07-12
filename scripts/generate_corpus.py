@@ -364,8 +364,12 @@ def _generate_pdf_text(ds_client, lang: str, title: str, topic: str) -> str:
         f"- No placeholders like [INSERT NAME] — write complete, realistic content\n"
         f"- Do not include any preamble or explanation — start directly with the document body"
     )
-    resp = client.models.generate_content(model="gemini-2.5-flash", contents=prompt)
-    return resp.text.strip()
+    resp = ds_client.chat.completions.create(
+        model="deepseek-v4-flash",
+        messages=[{"role": "user", "content": prompt}],
+        max_tokens=1500,
+    )
+    return (resp.choices[0].message.content or "").strip()
 
 
 def _generate_slide_texts(ds_client, title: str, topic: str, n_slides: int) -> list[dict]:
