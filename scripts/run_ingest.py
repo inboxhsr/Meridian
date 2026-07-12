@@ -79,9 +79,6 @@ def main(reset: bool = False, dry_run: bool = False) -> None:
         for path in files:
             meta = _parse_filename(path)
             mod = modality_of(path)
-            if mod == "audio":
-                print(f"  SKIP  [AUDIO ] {path.name}")
-                continue
             text = extract(path)
             if not text:
                 print(f"  SKIP  [{mod.upper():5}] {path.name} (empty extraction)")
@@ -118,11 +115,6 @@ def main(reset: bool = False, dry_run: bool = False) -> None:
     for path in files:
         meta = _parse_filename(path)
         mod = modality_of(path)
-
-        # Skip audio (Sprint 4)
-        if mod == "audio":
-            print(f"  DEFER [AUDIO ] {path.name}")
-            continue
 
         # Skip already-ingested files (unless reset)
         if not reset and store.already_ingested(mv_client, path.name):
