@@ -154,4 +154,4 @@ See [`../Planning/sprint_tracker.md`](../Planning/sprint_tracker.md) for live sp
 
 ---
 
-*Part of the Meridian portfolio project. See `../Planning/` for full architecture and design documentation.*
+*Part of the Meridian portfolio project. See `../Planning/` for full architecture and documentation.*
