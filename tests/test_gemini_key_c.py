@@ -1,34 +1,42 @@
 """
 test_gemini_key_c.py — Sprint 0 test gate
 
-Verifies GEMINI_API_KEY_C works against gemini-2.5-pro.
-KEY_C is used by the Generator node — the only node using the Pro model.
+Verifies GEMINI_API_KEY_C works against gemini-2.5-flash.
+KEY_C is used by the Generator node.
+
+NOTE: gemini-2.5-pro is PAYWALLED on free-tier AI Studio keys (as of April 2026).
+      All Meridian nodes use gemini-2.5-flash across all three keys.
+      The 3-key rotation still provides rate-limit headroom per the original design.
+
+SDK: google-genai (replaces deprecated google-generativeai, EOL Nov 2025)
 """
 import os
 import pytest
-import google.generativeai as genai
+from google import genai
 
 
-def test_gemini_key_c_pro_responds():
-    """Send a minimal prompt to gemini-2.5-pro using KEY_C and expect a response."""
+def test_gemini_key_c_flash_responds():
+    """Send a minimal prompt to gemini-2.5-flash using KEY_C and expect a response."""
     api_key = os.environ.get("GEMINI_API_KEY_C")
     if not api_key:
         pytest.skip("GEMINI_API_KEY_C not set — run test_env.py first")
 
-    genai.configure(api_key=api_key)
-    model = genai.GenerativeModel("gemini-2.5-pro")
+    client = genai.Client(api_key=api_key)
 
     try:
-        response = model.generate_content("Reply with the single word: OK")
+        response = client.models.generate_content(
+            model="gemini-2.5-flash",
+            contents="Reply with the single word: OK",
+        )
     except Exception as exc:
         pytest.fail(
-            f"GEMINI_API_KEY_C failed to get a response from gemini-2.5-pro.\n"
+            f"GEMINI_API_KEY_C failed to get a response from gemini-2.5-flash.\n"
             f"  Error: {exc}\n"
-            f"  → Check your key is valid. Note: gemini-2.5-pro may have stricter "
-            f"rate limits on free-tier accounts."
+            f"  → Check your key is valid at https://aistudio.google.com\n"
+            f"  → gemini-2.5-pro is paywalled on free-tier keys; flash is used instead."
         )
 
     assert response.text is not None and response.text.strip() != "", (
-        f"KEY_C got an empty response from gemini-2.5-pro.\n"
+        f"KEY_C got an empty response from gemini-2.5-flash.\n"
         f"  Raw response: {response}"
     )

@@ -3,10 +3,12 @@ test_gemini_key_b.py — Sprint 0 test gate
 
 Verifies GEMINI_API_KEY_B works against gemini-2.5-flash.
 KEY_B is used by the Query Rewriter and Critic nodes.
+
+SDK: google-genai (replaces deprecated google-generativeai, EOL Nov 2025)
 """
 import os
 import pytest
-import google.generativeai as genai
+from google import genai
 
 
 def test_gemini_key_b_flash_responds():
@@ -15,16 +17,18 @@ def test_gemini_key_b_flash_responds():
     if not api_key:
         pytest.skip("GEMINI_API_KEY_B not set — run test_env.py first")
 
-    genai.configure(api_key=api_key)
-    model = genai.GenerativeModel("gemini-2.5-flash")
+    client = genai.Client(api_key=api_key)
 
     try:
-        response = model.generate_content("Reply with the single word: OK")
+        response = client.models.generate_content(
+            model="gemini-2.5-flash",
+            contents="Reply with the single word: OK",
+        )
     except Exception as exc:
         pytest.fail(
             f"GEMINI_API_KEY_B failed to get a response from gemini-2.5-flash.\n"
             f"  Error: {exc}\n"
-            f"  → Check your key is valid and has not exceeded its quota."
+            f"  → Check your key is valid at https://aistudio.google.com"
         )
 
     assert response.text is not None and response.text.strip() != "", (

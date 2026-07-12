@@ -47,7 +47,7 @@ services:
 
   # --- Milvus Standalone ---
   milvus:
-    image: milvusdb/milvus:v2.6-latest
+    image: milvusdb/milvus:v2.6.19
     container_name: meridian-milvus
     command: ["milvus", "run", "standalone"]
     environment:
