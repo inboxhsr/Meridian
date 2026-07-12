@@ -3,6 +3,9 @@
 # Python 3.11 | Pinned with >= for compatibility
 # ============================================================
 
+# --- Milvus ---
+pymilvus>=2.6.0
+
 # --- Gemini API (PII Redactor + Router + Embedding) ---
 google-genai>=1.0.0
 
