@@ -52,12 +52,38 @@ def extract_slide(path: Path) -> str:
 
 # ── Audio MP3 ─────────────────────────────────────────────────────────────────
 
-def extract_audio(path: Path) -> str:
-    """Audio transcription deferred to Sprint 4 (Whisper).
+_whisper_model = None   # module-level cache — loaded once per process
 
-    Returns "" for now — audio files are skipped by the ingest pipeline.
+
+def _get_whisper_model(size: str = "tiny"):
+    global _whisper_model
+    if _whisper_model is None:
+        import whisper as _whisper
+        _whisper_model = _whisper.load_model(size)
+    return _whisper_model
+
+
+def extract_audio(path: Path) -> str:
+    """Transcribe MP3 using openai-whisper (tiny model, CPU-only, ~39 MB).
+
+    First call downloads the model from OpenAI's CDN.
+    Requires ffmpeg: https://ffmpeg.org/download.html (winget install ffmpeg)
+
+    Falls back to "" if openai-whisper or ffmpeg is not installed.
     """
-    return ""
+    try:
+        model = _get_whisper_model("tiny")
+        result = model.transcribe(str(path), fp16=False)   # fp16=False → CPU safe
+        return _clean(result.get("text", ""))
+    except ImportError:
+        warnings.warn(
+            "openai-whisper not installed — audio transcription skipped. "
+            "Install: pip install openai-whisper"
+        )
+        return ""
+    except Exception as exc:
+        warnings.warn(f"Whisper transcription failed for {path.name}: {exc}")
+        return ""
 
 
 # ── Helpers ───────────────────────────────────────────────────────────────────
