@@ -21,11 +21,15 @@ _DEFAULT_DELAY = 0.05  # seconds between calls — Gemini embedding is 2000 RPM
 
 
 def get_client() -> genai.Client:
-    """Return a Gemini client configured with the embedding key."""
+    """Return a Gemini client configured with the embedding key.
+
+    Forces api_version='v1' (stable) — text-embedding-004 is not available
+    on the default v1beta endpoint used by the SDK.
+    """
     key = os.environ.get("GEMINI_EMBEDDING_KEY")
     if not key:
         raise EnvironmentError("GEMINI_EMBEDDING_KEY not set in .env")
-    return genai.Client(api_key=key)
+    return genai.Client(api_key=key, http_options={"api_version": "v1"})
 
 
 def embed_one(client: genai.Client, text: str, task_type: str = "RETRIEVAL_DOCUMENT") -> list[float]:
