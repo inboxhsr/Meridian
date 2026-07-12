@@ -15,8 +15,8 @@ import time
 from google import genai
 from google.genai import types
 
-EMBEDDING_MODEL = "text-embedding-004"
-EMBEDDING_DIM = 768
+EMBEDDING_MODEL = "gemini-embedding-001"
+EMBEDDING_DIM = 3072
 _DEFAULT_DELAY = 0.05  # seconds between calls — Gemini embedding is 2000 RPM
 
 
@@ -29,7 +29,7 @@ def get_client() -> genai.Client:
     key = os.environ.get("GEMINI_EMBEDDING_KEY")
     if not key:
         raise EnvironmentError("GEMINI_EMBEDDING_KEY not set in .env")
-    return genai.Client(api_key=key, http_options={"api_version": "v1"})
+    return genai.Client(api_key=key)
 
 
 def embed_one(client: genai.Client, text: str, task_type: str = "RETRIEVAL_DOCUMENT") -> list[float]:

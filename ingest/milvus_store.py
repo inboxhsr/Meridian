@@ -21,7 +21,7 @@ import os
 from pymilvus import MilvusClient, DataType
 
 COLLECTION = "meridian_corpus"
-DIM = 768
+DIM = 3072  # gemini-embedding-001 output dimension
 
 # ── Connection ────────────────────────────────────────────────────────────────
 

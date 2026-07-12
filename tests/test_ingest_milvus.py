@@ -105,7 +105,7 @@ def test_all_languages_ingested(mv):
 # ── Embedding sanity ──────────────────────────────────────────────────────────
 
 def test_embeddings_have_correct_dimension(mv):
-    """Sample 5 records and verify each embedding is 768-dimensional."""
+    """Sample 5 records and verify each embedding is 3072-dimensional (gemini-embedding-001)."""
     from ingest.milvus_store import COLLECTION, DIM
     res = mv.query(COLLECTION, filter="", output_fields=["embedding"], limit=5)
     assert res, "No records returned from Milvus"
@@ -123,7 +123,7 @@ def test_search_returns_results(mv):
     """A nearest-neighbour search must return at least 1 result."""
     from ingest.milvus_store import COLLECTION, DIM
     # Use a zero vector — not semantically meaningful, but proves the search path works
-    dummy_vector = [0.0] * DIM
+    dummy_vector = [0.0] * DIM  # 3072 dims for gemini-embedding-001
     results = mv.search(
         collection_name=COLLECTION,
         data=[dummy_vector],
