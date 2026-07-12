@@ -25,7 +25,7 @@ def test_deepseek_key_responds():
 
     try:
         response = client.chat.completions.create(
-            model="deepseek-chat",
+            model="deepseek-v4-flash",
             messages=[{"role": "user", "content": "Reply with the single word: OK"}],
             max_tokens=5,
         )
