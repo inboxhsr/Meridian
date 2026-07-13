@@ -20,10 +20,9 @@ python-dotenv>=1.0.0
 langgraph>=0.2.0
 langchain-core>=0.3.0
 
-# --- Reranker (BGE-reranker-v2-m3, int8) ---
-# Install in Sprint 6:
-# FlagEmbedding>=1.2.0
-# sentence-transformers>=3.0.0
+# --- Reranker (BGE-reranker-v2-m3, CPU float32) ---
+FlagEmbedding>=1.2.0
+sentence-transformers>=3.0.0
 
 # --- Text Processing ---
 jieba>=0.42.1

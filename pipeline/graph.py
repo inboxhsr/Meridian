@@ -1,5 +1,5 @@
 """
-pipeline/graph.py — Sprint 5
+pipeline/graph.py — Sprint 6
 
 Assembles the full Meridian LangGraph agentic pipeline.
 
@@ -8,6 +8,8 @@ Graph topology:
        ├── out_of_scope → abstainer → END
        ├── simple       → retriever
        └── multi_hop    → query_rewriter → retriever
+                                               ↓
+                                           reranker  ← Sprint 6
                                                ↓
                                             critic
                                        ├── sufficient → generator → END
@@ -23,6 +25,7 @@ from pipeline.state import MeridianState
 from pipeline.nodes.intent_classifier import classify_intent
 from pipeline.nodes.query_rewriter import rewrite_query
 from pipeline.nodes.retriever import retrieve
+from pipeline.nodes.reranker import rerank
 from pipeline.nodes.critic import grade_context
 from pipeline.nodes.generator import generate_answer
 from pipeline.nodes.abstainer import abstain
@@ -60,6 +63,7 @@ def build_graph():
     g.add_node("intent_classifier", classify_intent)
     g.add_node("query_rewriter",    rewrite_query)
     g.add_node("retriever",         retrieve)
+    g.add_node("reranker",          rerank)
     g.add_node("critic",            grade_context)
     g.add_node("generator",         generate_answer)
     g.add_node("abstainer",         abstain)
@@ -80,7 +84,8 @@ def build_graph():
 
     # Fixed edges
     g.add_edge("query_rewriter", "retriever")
-    g.add_edge("retriever",      "critic")
+    g.add_edge("retriever",      "reranker")
+    g.add_edge("reranker",       "critic")
 
     # Edges from critic (conditional — CRAG loop)
     g.add_conditional_edges(
