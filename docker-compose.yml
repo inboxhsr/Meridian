@@ -1,6 +1,6 @@
 # ============================================================
 # Meridian — docker-compose.yml
-# Milvus 2.6 Standalone (includes etcd + minio dependencies)
+# Full stack: Milvus 2.6 Standalone + FastAPI + Streamlit
 # ============================================================
 
 version: "3.8"
@@ -68,6 +68,24 @@ services:
       interval: 30s
       timeout: 20s
       retries: 5
+
+  # --- Meridian App: FastAPI + Streamlit ---
+  app:
+    build: .
+    container_name: meridian-app
+    ports:
+      - "8000:8000"     # FastAPI REST API
+      - "8501:8501"     # Streamlit UI
+    env_file:
+      - .env
+    depends_on:
+      milvus:
+        condition: service_healthy
+    # Start both FastAPI and Streamlit
+    command: >
+      sh -c "uvicorn app.main:app --host 0.0.0.0 --port 8000 &
+             streamlit run app/streamlit_app.py --server.port 8501 --server.address 0.0.0.0 &
+             wait"
 
 volumes:
   etcd_data:

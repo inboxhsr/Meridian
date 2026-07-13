@@ -26,6 +26,8 @@ import subprocess
 import sys
 from pathlib import Path
 
+from dotenv import load_dotenv
+
 try:
     import requests  # type: ignore
 except ImportError:
@@ -75,6 +77,7 @@ def print_check(label: str, ok: bool, detail: str) -> None:
 
 
 def run_prechecks(api_url: str) -> bool:
+    load_dotenv(dotenv_path=_ROOT / ".env", override=False)
     print("\n=== Meridian E2E Pre-condition Check ===\n")
     api_ok, api_msg = check_api(api_url)
     env_ok, env_msg = check_env()
