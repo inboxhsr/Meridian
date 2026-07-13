@@ -1,5 +1,5 @@
 """
-pipeline/nodes/reranker.py — Sprint 6
+pipeline/nodes/reranker.py — Sprint 6 / Sprint 8 (observability)
 
 BGE-reranker-v2-m3 cross-encoder reranker node.
 
@@ -22,6 +22,7 @@ Implementation note:
 from __future__ import annotations
 import math
 
+from observability.db import init_db, log_node
 from pipeline.state import MeridianState
 
 _MODEL_NAME = "BAAI/bge-reranker-v2-m3"
@@ -44,12 +45,13 @@ def _get_reranker():
 def rerank(state: MeridianState) -> dict:
     """LangGraph node — rerank retrieved chunks by cross-encoder score.
 
-    Reads:  chunks, safe_query, top_k
+    Reads:  chunks, safe_query, top_k, query_id
     Writes: chunks  (reordered descending by reranker_score, trimmed to top_k)
     """
     chunks = state.get("chunks", [])
     safe_query = state["safe_query"]
     top_k = state.get("top_k", 5)
+    query_id = state.get("query_id", "")
 
     if not chunks:
         return {"chunks": []}
@@ -68,5 +70,17 @@ def rerank(state: MeridianState) -> dict:
         chunk["reranker_score"] = score
 
     reranked = sorted(chunks, key=lambda c: c["reranker_score"], reverse=True)
+
+    # ── Observability log ─────────────────────────────────────────────────────
+    try:
+        init_db()
+        log_node(
+            query_id=query_id,
+            node_name="reranker",
+            estimated_cost=0.0,         # local model — no API cost
+            tokens_used=len(chunks),    # number of pairs scored
+        )
+    except Exception:
+        pass
 
     return {"chunks": reranked[:top_k]}

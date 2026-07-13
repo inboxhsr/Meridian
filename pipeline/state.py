@@ -10,6 +10,9 @@ from typing import TypedDict
 
 
 class MeridianState(TypedDict):
+    # ── Observability ─────────────────────────────────────────────────────────
+    query_id: str         # UUID per graph invocation — groups all node log rows
+
     # ── Input ─────────────────────────────────────────────────────────────────
     query: str            # original user query (verbatim)
     bu_filter: str        # business unit filter; '' = all BUs

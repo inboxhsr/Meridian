@@ -1,5 +1,5 @@
 """
-pipeline/nodes/query_rewriter.py — Sprint 5
+pipeline/nodes/query_rewriter.py — Sprint 5 / Sprint 8 (observability)
 
 Decomposes a user query into one or more atomic sub-questions using DeepSeek.
 For simple queries a single-element list is returned (the original query).
@@ -16,6 +16,7 @@ import os
 
 from openai import OpenAI
 
+from observability.db import init_db, log_node
 from pipeline.state import MeridianState
 
 _SYSTEM_PROMPT = (
@@ -34,19 +35,46 @@ _SYSTEM_PROMPT = (
 def rewrite_query(state: MeridianState) -> dict:
     """LangGraph node — decompose safe_query into sub-questions.
 
-    Reads:  safe_query
+    Reads:  safe_query, query_id, retrieval_round
     Writes: sub_questions
     """
     safe_query = state["safe_query"]
-    sub_questions = _decompose(safe_query)
+    query_id = state.get("query_id", "")
+    retrieval_round = state.get("retrieval_round", 0)
+
+    sub_questions, tokens_used = _decompose_with_usage(safe_query)
+
+    # ── Observability log ─────────────────────────────────────────────────────
+    try:
+        init_db()
+        log_node(
+            query_id=query_id,
+            node_name="query_rewriter",
+            model_used="deepseek-v4-flash",
+            tokens_used=tokens_used,
+            estimated_cost=0.0,     # DeepSeek free tier
+            retrieval_round=retrieval_round,
+        )
+    except Exception:
+        pass
+
     return {"sub_questions": sub_questions}
 
 
 def _decompose(safe_query: str) -> list[str]:
-    """Call DeepSeek to decompose the query. Return safe-default on failure."""
+    """Call DeepSeek to decompose the query. Return safe-default on failure.
+
+    Public interface kept for backward-compatibility with existing tests.
+    """
+    result, _ = _decompose_with_usage(safe_query)
+    return result
+
+
+def _decompose_with_usage(safe_query: str) -> tuple[list[str], int]:
+    """Internal: decompose and return (sub_questions, total_tokens)."""
     key = os.environ.get("DEEPSEEK_API_KEY", "")
     if not key:
-        return [safe_query]
+        return [safe_query], 0
 
     try:
         client = OpenAI(api_key=key, base_url="https://api.deepseek.com")
@@ -70,7 +98,10 @@ def _decompose(safe_query: str) -> list[str]:
             and sub_questions
             and all(isinstance(q, str) and q.strip() for q in sub_questions)
         ):
-            return sub_questions
-        return [safe_query]
+            total_tokens = (
+                getattr(resp.usage, "prompt_tokens", 0) or 0
+            ) + (getattr(resp.usage, "completion_tokens", 0) or 0)
+            return sub_questions, total_tokens
+        return [safe_query], 0
     except Exception:
-        return [safe_query]
+        return [safe_query], 0

@@ -27,7 +27,7 @@ def _make_chunk(source: str, text: str, score: float = 0.8) -> dict:
 
 def _mock_reranker(scores: list[float]):
     mock = MagicMock()
-    mock.compute_score.return_value = scores
+    mock.predict.return_value = scores
     return mock
 
 

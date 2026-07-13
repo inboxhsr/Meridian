@@ -1,5 +1,5 @@
 """
-app/routes/query.py — Sprint 5
+app/routes/query.py — Sprint 5 / Sprint 8 (observability)
 
 POST /query — LangGraph agentic pipeline endpoint.
 
@@ -7,12 +7,14 @@ Flow: intent_classifier → [query_rewriter] → retriever → critic → [loop]
 """
 
 import sys
+import uuid
 from pathlib import Path
 from fastapi import APIRouter, HTTPException
 
 sys.path.insert(0, str(Path(__file__).parent.parent.parent))
 
 from app.models import QueryRequest, QueryResponse, ChunkHit
+from observability.db import init_db
 from pipeline.graph import graph
 
 router = APIRouter()
@@ -35,7 +37,14 @@ async def query_endpoint(request: QueryRequest) -> QueryResponse:
        OR **Abstainer** — honest no-answer after max rounds or out-of-scope
     """
     try:
+        session_id = str(uuid.uuid4())
+        try:
+            init_db()
+        except Exception:
+            pass
+
         initial_state = {
+            "query_id":           session_id,
             "query":              request.query,
             "bu_filter":          request.bu,
             "top_k":              request.top_k,

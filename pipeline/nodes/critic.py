@@ -1,5 +1,5 @@
 """
-pipeline/nodes/critic.py — Sprint 5
+pipeline/nodes/critic.py — Sprint 5 / Sprint 8 (observability)
 
 Grades the quality of retrieved context using DeepSeek.
 Returns structured JSON verdict determining whether to generate, retry, or abstain.
@@ -19,6 +19,7 @@ import os
 
 from openai import OpenAI
 
+from observability.db import init_db, log_node
 from pipeline.state import MeridianState
 
 _MAX_ROUNDS = 3
@@ -50,25 +51,28 @@ _CONTEXT_CHARS = 3_000  # keep critic prompt concise
 def grade_context(state: MeridianState) -> dict:
     """LangGraph node — grade retrieved context quality.
 
-    Reads:  safe_query, chunks, retrieval_round
+    Reads:  safe_query, chunks, retrieval_round, query_id
     Writes: groundedness_score, relevance_score, verdict, critic_reasoning
     """
     safe_query = state["safe_query"]
     chunks = state.get("chunks", [])
     retrieval_round = state.get("retrieval_round", 1)
+    query_id = state.get("query_id", "")
 
     if not chunks:
         # No chunks — verdict depends on remaining rounds
         verdict = "retry" if retrieval_round < _MAX_ROUNDS else "abstain"
-        return {
+        result = {
             "groundedness_score": 0.0,
             "relevance_score": 0.0,
             "verdict": verdict,
             "critic_reasoning": "No chunks retrieved.",
         }
+        _log(query_id, result, retrieval_round, tokens_used=0)
+        return result
 
     context_snippet = _build_snippet(chunks)
-    scores = _grade(safe_query, context_snippet)
+    scores, tokens_used = _grade(safe_query, context_snippet)
 
     # Apply threshold logic (overrides LLM verdict for consistency)
     if (
@@ -81,12 +85,34 @@ def grade_context(state: MeridianState) -> dict:
     else:
         verdict = "retry"
 
-    return {
+    result = {
         "groundedness_score": scores["groundedness_score"],
-        "relevance_score": scores["relevance_score"],
-        "verdict": verdict,
-        "critic_reasoning": scores["reasoning"],
+        "relevance_score":    scores["relevance_score"],
+        "verdict":            verdict,
+        "critic_reasoning":   scores["reasoning"],
     }
+    _log(query_id, result, retrieval_round, tokens_used=tokens_used)
+    return result
+
+
+def _log(query_id: str, result: dict, retrieval_round: int, tokens_used: int) -> None:
+    """Fire-and-forget observability log — never raises."""
+    try:
+        init_db()
+        log_node(
+            query_id=query_id,
+            node_name="critic",
+            model_used="deepseek-v4-flash",
+            estimated_cost=0.0,     # DeepSeek free tier
+            retrieval_round=retrieval_round,
+            groundedness_score=result["groundedness_score"],
+            relevance_score=result["relevance_score"],
+            verdict=result["verdict"],
+            critic_reasoning=result["critic_reasoning"],
+            tokens_used=tokens_used,
+        )
+    except Exception:
+        pass
 
 
 def _build_snippet(chunks: list[dict]) -> str:
@@ -102,8 +128,8 @@ def _build_snippet(chunks: list[dict]) -> str:
     return "\n\n".join(parts)
 
 
-def _grade(safe_query: str, context_snippet: str) -> dict:
-    """Call DeepSeek to grade context quality. Return conservative default on failure."""
+def _grade(safe_query: str, context_snippet: str) -> tuple[dict, int]:
+    """Call DeepSeek to grade context quality. Return (scores_dict, tokens_used)."""
     _safe_default = {
         "groundedness_score": 0.0,
         "relevance_score": 0.0,
@@ -112,7 +138,7 @@ def _grade(safe_query: str, context_snippet: str) -> dict:
 
     key = os.environ.get("DEEPSEEK_API_KEY", "")
     if not key:
-        return _safe_default
+        return _safe_default, 0
 
     try:
         client = OpenAI(api_key=key, base_url="https://api.deepseek.com")
@@ -131,10 +157,13 @@ def _grade(safe_query: str, context_snippet: str) -> dict:
             if raw.startswith("json"):
                 raw = raw[4:]
         data = json.loads(raw)
+        tokens_used = (
+            getattr(resp.usage, "prompt_tokens", 0) or 0
+        ) + (getattr(resp.usage, "completion_tokens", 0) or 0)
         return {
             "groundedness_score": float(data.get("groundedness_score", 0.0)),
             "relevance_score":    float(data.get("relevance_score", 0.0)),
             "reasoning":          str(data.get("reasoning", "")),
-        }
+        }, tokens_used
     except Exception:
-        return _safe_default
+        return _safe_default, 0

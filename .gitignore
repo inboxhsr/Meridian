@@ -16,3 +16,6 @@ build_artifacts/
 # OS
 .DS_Store
 Thumbs.db
+
+# Observability DB (runtime artifact — not source code)
+observability/meridian.db

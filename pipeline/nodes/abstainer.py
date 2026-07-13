@@ -1,5 +1,5 @@
 """
-pipeline/nodes/abstainer.py — Sprint 5
+pipeline/nodes/abstainer.py — Sprint 5 / Sprint 8 (observability)
 
 Honest no-answer node. No LLM call — fixed language-aware message.
 Triggered when:
@@ -12,6 +12,7 @@ Message template follows the charter:
 
 from __future__ import annotations
 
+from observability.db import init_db, log_node
 from pipeline.state import MeridianState
 
 _ABSTAIN_MESSAGES = {
@@ -47,19 +48,35 @@ _OUT_OF_SCOPE_MESSAGES = {
 def abstain(state: MeridianState) -> dict:
     """LangGraph node — return an honest no-answer response.
 
-    Reads:  intent, lang, retrieval_round
+    Reads:  intent, lang, retrieval_round, query_id
     Writes: answer, sources, chunks_used, abstained
     """
     lang = state.get("lang", "en")
     intent = state.get("intent", "")
     rounds = state.get("retrieval_round", 0)
+    query_id = state.get("query_id", "")
 
     if intent == "out_of_scope":
         template = _OUT_OF_SCOPE_MESSAGES.get(lang, _OUT_OF_SCOPE_MESSAGES["en"])
         answer = template
+        reason = "out_of_scope"
     else:
         template = _ABSTAIN_MESSAGES.get(lang, _ABSTAIN_MESSAGES["en"])
         answer = template.format(rounds=rounds)
+        reason = f"max_rounds_exhausted (rounds={rounds})"
+
+    # ── Observability log ─────────────────────────────────────────────────────
+    try:
+        init_db()
+        log_node(
+            query_id=query_id,
+            node_name="abstainer",
+            estimated_cost=0.0,     # no LLM call — fixed response
+            verdict="abstain",
+            critic_reasoning=reason,
+        )
+    except Exception:
+        pass
 
     return {
         "answer":      answer,
