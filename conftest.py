@@ -14,3 +14,13 @@ from dotenv import load_dotenv
 # Load .env from the build/ directory (where this conftest.py lives)
 _env_path = Path(__file__).parent / ".env"
 load_dotenv(dotenv_path=_env_path, override=False)
+
+
+def pytest_configure(config):
+    """Register custom marks to suppress PytestUnknownMarkWarning."""
+    config.addinivalue_line(
+        "markers",
+        "slow: marks tests as slow-running (e.g. real model inference, latency guards). "
+        "Skip with: pytest -m 'not slow'",
+    )
+
