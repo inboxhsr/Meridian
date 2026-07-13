@@ -1,5 +1,5 @@
 """
-tests/test_pipeline_graph.py — Sprint 5
+tests/test_pipeline_graph.py — Sprint 5 / Sprint 8 (query_id added to state)
 
 Integration tests for the full LangGraph pipeline.
 Requires: Milvus running, GEMINI_API_KEY_A, DEEPSEEK_API_KEY set in .env.
@@ -8,6 +8,7 @@ These tests exercise the real graph end-to-end with live API calls.
 """
 
 from __future__ import annotations
+import uuid
 import pytest
 
 
@@ -23,6 +24,7 @@ def _graph():
 def _invoke(graph, query: str, bu_filter: str = "", top_k: int = 5) -> dict:
     """Build the initial state and invoke the graph."""
     initial_state = {
+        "query_id":           str(uuid.uuid4()),   # Sprint 8: observability session ID
         "query":              query,
         "bu_filter":          bu_filter,
         "top_k":              top_k,
