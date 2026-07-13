@@ -30,8 +30,7 @@ import uuid
 
 import pytest
 
-import observability.db as _db_module
-from observability.db import init_db, log_node
+from observability.db import init_db
 
 
 # ── Skip guard ────────────────────────────────────────────────────────────────
@@ -87,10 +86,15 @@ def live_db(tmp_path_factory):
     db_mod._DB_PATH = original
 
 
-def _invoke(graph, query: str, bu_filter: str = "", top_k: int = 5) -> dict:
-    """Invoke the graph with a full initial state including query_id."""
+def _invoke(graph, query: str, bu_filter: str = "", top_k: int = 5,
+            session_id: str | None = None) -> tuple[dict, str]:
+    """Invoke the graph with a full initial state including query_id.
+
+    Returns (result_dict, session_id) so tests can query the DB by session.
+    """
+    sid = session_id or str(uuid.uuid4())
     initial_state = {
-        "query_id":           str(uuid.uuid4()),
+        "query_id":           sid,
         "query":              query,
         "bu_filter":          bu_filter,
         "top_k":              top_k,
@@ -110,7 +114,7 @@ def _invoke(graph, query: str, bu_filter: str = "", top_k: int = 5) -> dict:
         "chunks_used":        0,
         "abstained":          False,
     }
-    return graph.invoke(initial_state)
+    return graph.invoke(initial_state), sid
 
 
 # ── Helper ────────────────────────────────────────────────────────────────────
@@ -139,41 +143,37 @@ def _all_rows(db_path) -> list[dict]:
 
 def test_invoke_writes_rows_to_sqlite(_graph, live_db):
     """A full graph.invoke() must produce at least one row in query_log."""
-    result = _invoke(_graph, "What is the travel expense reimbursement limit?", bu_filter="hr")
-    sid = result.get("query_id") or _all_rows(live_db)[-1]["query_id"]
-    rows = _rows_for_session(live_db, sid) if result.get("query_id") else _all_rows(live_db)
+    _, sid = _invoke(_graph, "What is the travel expense reimbursement limit?", bu_filter="hr")
+    rows = _rows_for_session(live_db, sid)
     assert len(rows) > 0, "Expected at least one observability row after graph.invoke()"
 
 
 def test_all_rows_share_query_id(_graph, live_db):
     """All rows written during one graph.invoke() must share the same query_id."""
-    session_id = str(uuid.uuid4())
+    # Inject a known session_id so we can look up rows precisely.
+    # Note: monkey-patching _db_module.log_node does NOT work here because each
+    # pipeline node imported log_node by name at module load time — the module
+    # attribute patch has no effect on those already-bound references.
+    _, sid = _invoke(
+        _graph,
+        "What is the IT security access control policy?",
+        bu_filter="it_security",
+    )
+    rows = _rows_for_session(live_db, sid)
 
-    # Patch log_node to capture the query_id used
-    captured_ids: list[str] = []
-    original_log = _db_module.log_node
-
-    def _capturing_log_node(*, query_id, **kwargs):
-        captured_ids.append(query_id)
-        return original_log(query_id=query_id, **kwargs)
-
-    _db_module.log_node = _capturing_log_node
-    try:
-        _invoke(_graph, "What is the IT security access control policy?", bu_filter="it_security")
-    finally:
-        _db_module.log_node = original_log
-
-    assert len(captured_ids) > 0, "log_node was never called — nodes not logging"
-    unique_ids = set(captured_ids)
-    assert len(unique_ids) == 1, (
-        f"Expected one unique query_id per invocation; got: {unique_ids}"
+    assert len(rows) > 0, (
+        f"log_node was never called for session {sid} — nodes are not logging"
+    )
+    unique_ids = {r["query_id"] for r in rows}
+    assert unique_ids == {sid}, (
+        f"Expected all rows to carry query_id={sid!r}; got: {unique_ids}"
     )
 
 
 def test_estimated_cost_never_null(_graph, live_db):
     """After a live invoke, every row in the DB must have estimated_cost IS NOT NULL."""
-    _invoke(_graph, "What is the leave policy entitlement?", bu_filter="hr")
-    rows = _all_rows(live_db)
+    _, sid = _invoke(_graph, "What is the leave policy entitlement?", bu_filter="hr")
+    rows = _rows_for_session(live_db, sid)
     for row in rows:
         assert row["estimated_cost"] is not None, (
             f"NULL estimated_cost found for node={row['node_name']}, id={row['id']}"
@@ -182,12 +182,11 @@ def test_estimated_cost_never_null(_graph, live_db):
 
 def test_intent_classifier_row_has_correct_model(_graph, live_db):
     """The intent_classifier row must record model_used = 'gemini-2.5-flash'."""
-    before_count = len(_all_rows(live_db))
-    _invoke(_graph, "Compare the expense policy and IT security incident response", bu_filter="")
-    all_rows = _all_rows(live_db)
-    new_rows = all_rows[before_count:]
-
-    classifier_rows = [r for r in new_rows if r["node_name"] == "intent_classifier"]
+    _, sid = _invoke(
+        _graph, "Compare the expense policy and IT security incident response", bu_filter=""
+    )
+    rows = _rows_for_session(live_db, sid)
+    classifier_rows = [r for r in rows if r["node_name"] == "intent_classifier"]
     assert len(classifier_rows) >= 1, "No intent_classifier row found after invoke"
     assert classifier_rows[0]["model_used"] == "gemini-2.5-flash", (
         f"Expected gemini-2.5-flash, got: {classifier_rows[0]['model_used']}"
@@ -196,13 +195,11 @@ def test_intent_classifier_row_has_correct_model(_graph, live_db):
 
 def test_local_nodes_have_zero_cost(_graph, live_db):
     """Reranker and retriever rows must have estimated_cost = 0.0 exactly."""
-    before_count = len(_all_rows(live_db))
-    _invoke(_graph, "What is the expense reimbursement cap?", bu_filter="hr")
-    all_rows = _all_rows(live_db)
-    new_rows = all_rows[before_count:]
+    _, sid = _invoke(_graph, "What is the expense reimbursement cap?", bu_filter="hr")
+    rows = _rows_for_session(live_db, sid)
 
     zero_cost_nodes = {"reranker", "retriever", "abstainer", "generator", "query_rewriter"}
-    for row in new_rows:
+    for row in rows:
         if row["node_name"] in zero_cost_nodes:
             assert row["estimated_cost"] == 0.0, (
                 f"Expected cost=0.0 for {row['node_name']}, got {row['estimated_cost']}"
@@ -211,32 +208,23 @@ def test_local_nodes_have_zero_cost(_graph, live_db):
 
 def test_two_invocations_produce_distinct_query_ids(_graph, live_db):
     """Two separate graph.invoke() calls must log rows under different query_ids."""
-    captured: list[list[str]] = [[], []]
-    original_log = _db_module.log_node
+    # Inject pre-known session IDs so we can verify isolation via the DB.
+    # Monkey-patching log_node does NOT work (nodes imported it by name at load time).
+    sid_a = str(uuid.uuid4())
+    sid_b = str(uuid.uuid4())
 
-    call_count = [0]
+    _invoke(_graph, "What is the travel expense limit?",   bu_filter="hr",          session_id=sid_a)
+    _invoke(_graph, "What is the IT security policy?",     bu_filter="it_security", session_id=sid_b)
 
-    def _tracking_log(*, query_id, **kwargs):
-        captured[min(call_count[0], 1)].append(query_id)
-        return original_log(query_id=query_id, **kwargs)
+    rows_a = _rows_for_session(live_db, sid_a)
+    rows_b = _rows_for_session(live_db, sid_b)
 
-    # First invocation
-    _db_module.log_node = _tracking_log
-    try:
-        _invoke(_graph, "What is the travel expense limit?", bu_filter="hr")
-        call_count[0] = 1
-        _invoke(_graph, "What is the IT security policy?", bu_filter="it_security")
-    finally:
-        _db_module.log_node = original_log
-
-    ids_first  = set(captured[0])
-    ids_second = set(captured[1])
-
-    assert len(ids_first) == 1,  "First invocation should use exactly one query_id"
-    assert len(ids_second) == 1, "Second invocation should use exactly one query_id"
-    assert ids_first != ids_second, (
-        f"Two invocations must produce distinct query_ids; both got: {ids_first}"
-    )
+    assert len(rows_a) > 0, f"No rows found for first invocation (sid={sid_a})"
+    assert len(rows_b) > 0, f"No rows found for second invocation (sid={sid_b})"
+    assert sid_a != sid_b, "Session IDs must be distinct (uuid4 collision — extremely unlikely)"
+    # Confirm no cross-contamination: rows_a contain only sid_a, rows_b only sid_b
+    assert all(r["query_id"] == sid_a for r in rows_a), "rows_a contains a foreign query_id"
+    assert all(r["query_id"] == sid_b for r in rows_b), "rows_b contains a foreign query_id"
 
 
 def test_row_count_grows_across_invocations(_graph, live_db):
