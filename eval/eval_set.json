@@ -1,0 +1,749 @@
+[
+  {
+    "id": "en_hr_001",
+    "question": "What is the daily meal allowance for business travel?",
+    "ground_truth": "Meridian Global Corp provides daily meal allowances for approved business travel covering reasonable food and non-alcoholic beverages. Individual meal receipts are not typically required for amounts within the policy limit.",
+    "bu_filter": "hr",
+    "source_lang": "en",
+    "expected_lang": "en",
+    "unanswerable": false
+  },
+  {
+    "id": "en_hr_002",
+    "question": "What is the purpose of Meridian's Leave and Attendance Policy?",
+    "ground_truth": "The Meridian Global Corp Leave and Attendance Policy (V2.1, effective January 1, 2024) outlines leave benefits and attendance expectations for all eligible employees, ensuring consistency, fairness, and compliance with applicable labor laws across global operations.",
+    "bu_filter": "hr",
+    "source_lang": "en",
+    "expected_lang": "en",
+    "unanswerable": false
+  },
+  {
+    "id": "en_hr_003",
+    "question": "What does the Meridian Code of Conduct say about workplace ethics?",
+    "ground_truth": "All Meridian employees are expected to treat colleagues, customers, and partners with dignity, professionalism, and mutual respect, fostering an inclusive environment free from prejudice or discrimination. Employees must demonstrate honesty, integrity, and accountability.",
+    "bu_filter": "hr",
+    "source_lang": "en",
+    "expected_lang": "en",
+    "unanswerable": false
+  },
+  {
+    "id": "en_hr_004",
+    "question": "Who must approve exceptions to the expense reimbursement policy?",
+    "ground_truth": "Any exceptions to the expense reimbursement policy require prior written approval from a Vice President or higher authority.",
+    "bu_filter": "hr",
+    "source_lang": "en",
+    "expected_lang": "en",
+    "unanswerable": false
+  },
+  {
+    "id": "en_hr_005",
+    "question": "What type of leave provides paid time off for rest and recreation?",
+    "ground_truth": "Earned Leave (EL), also known as Annual Leave or Vacation Leave, provides employees with paid time off for rest, recreation, and personal matters.",
+    "bu_filter": "hr",
+    "source_lang": "en",
+    "expected_lang": "en",
+    "unanswerable": false
+  },
+  {
+    "id": "en_hr_006",
+    "question": "What is the scope of the expense policy in terms of employee types?",
+    "ground_truth": "The expense reimbursement policy applies to all full-time, part-time, and contract employees of Meridian Global Corp globally who incur business-related expenses on behalf of the company.",
+    "bu_filter": "hr",
+    "source_lang": "en",
+    "expected_lang": "en",
+    "unanswerable": false
+  },
+  {
+    "id": "en_hr_007",
+    "question": "Is Meridian's code of conduct mandatory for all employees?",
+    "ground_truth": "Yes. Adherence to the Code of Conduct is a condition of employment at Meridian Global Corp, which is a 40,000-employee multinational technology company.",
+    "bu_filter": "hr",
+    "source_lang": "en",
+    "expected_lang": "en",
+    "unanswerable": false
+  },
+  {
+    "id": "en_hr_008",
+    "question": "Does the leave policy apply to part-time employees?",
+    "ground_truth": "Part-time employees may be eligible for pro-rated leave benefits as per local regulations and their specific employment contracts.",
+    "bu_filter": "hr",
+    "source_lang": "en",
+    "expected_lang": "en",
+    "unanswerable": false
+  },
+  {
+    "id": "en_hr_009",
+    "question": "What is the purpose of the Employee Expense Reimbursement Policy?",
+    "ground_truth": "The policy outlines guidelines and procedures for reimbursement of business expenses incurred by Meridian Global Corp employees. It ensures consistent treatment of expenses, promotes fiscal responsibility, and clarifies what constitutes a reimbursable item.",
+    "bu_filter": "hr",
+    "source_lang": "en",
+    "expected_lang": "en",
+    "unanswerable": false
+  },
+  {
+    "id": "en_hr_010",
+    "question": "What local laws take priority over the global leave policy?",
+    "ground_truth": "Where local statutory requirements or collective bargaining agreements provide superior benefits or specific mandates, those provisions will supersede the global Meridian Leave and Attendance Policy.",
+    "bu_filter": "hr",
+    "source_lang": "en",
+    "expected_lang": "en",
+    "unanswerable": false
+  },
+  {
+    "id": "en_it_001",
+    "question": "What are the password minimum length requirements for Meridian systems?",
+    "ground_truth": "Passwords for Meridian Global Corp corporate systems must be a minimum of twelve (12) characters in length, and must include characters from at least three of four categories: uppercase letters, lowercase letters, numbers, and non-alphanumeric symbols.",
+    "bu_filter": "it_security",
+    "source_lang": "en",
+    "expected_lang": "en",
+    "unanswerable": false
+  },
+  {
+    "id": "en_it_002",
+    "question": "How quickly must IT provision a new user account after receiving an approved ticket?",
+    "ground_truth": "Upon receipt of a properly authorized and documented IT service ticket, the IT Department is mandated to provision the requested access within twenty-four (24) business hours.",
+    "bu_filter": "it_security",
+    "source_lang": "en",
+    "expected_lang": "en",
+    "unanswerable": false
+  },
+  {
+    "id": "en_it_003",
+    "question": "What is the response time for a P1 Critical cybersecurity incident?",
+    "ground_truth": "P1 Critical incidents require 15 minutes to initiate active response and CISO escalation. They involve confirmed data breaches of sensitive corporate or customer data, active ransomware attacks, or widespread critical service outages.",
+    "bu_filter": "it_security",
+    "source_lang": "en",
+    "expected_lang": "en",
+    "unanswerable": false
+  },
+  {
+    "id": "en_it_004",
+    "question": "Who must be notified for a P1 Critical incident?",
+    "ground_truth": "For P1 Critical incidents, immediate notification is required to Dr. Evelyn Reed (CISO), Ms. Sophia Chen (Head of Legal), and the Executive Leadership Team.",
+    "bu_filter": "it_security",
+    "source_lang": "en",
+    "expected_lang": "en",
+    "unanswerable": false
+  },
+  {
+    "id": "en_it_005",
+    "question": "What is the access provisioning principle for Meridian employees?",
+    "ground_truth": "Access provisioning follows the least privilege principle — employees are granted only the minimum access level necessary for an individual to perform their assigned duties. All access is subject to continuous monitoring and periodic review.",
+    "bu_filter": "it_security",
+    "source_lang": "en",
+    "expected_lang": "en",
+    "unanswerable": false
+  },
+  {
+    "id": "en_it_006",
+    "question": "How many previous passwords are employees prohibited from reusing?",
+    "ground_truth": "Users are prohibited from reusing any of their previous twelve (12) passwords.",
+    "bu_filter": "it_security",
+    "source_lang": "en",
+    "expected_lang": "en",
+    "unanswerable": false
+  },
+  {
+    "id": "en_it_007",
+    "question": "What is the response time for a P2 High cybersecurity incident?",
+    "ground_truth": "P2 High incidents require 1 hour to initiate active response and CISO escalation. They involve unauthorized access to critical systems or significant system compromise without confirmed data exfiltration.",
+    "bu_filter": "it_security",
+    "source_lang": "en",
+    "expected_lang": "en",
+    "unanswerable": false
+  },
+  {
+    "id": "en_it_008",
+    "question": "Who is the SOC Lead named in the incident response policy?",
+    "ground_truth": "Mr. Arjun Singh is named as the SOC Lead in the Meridian Cybersecurity Incident Response Policy.",
+    "bu_filter": "it_security",
+    "source_lang": "en",
+    "expected_lang": "en",
+    "unanswerable": false
+  },
+  {
+    "id": "en_prod_001",
+    "question": "What languages does Meridian Analytics Platform v1 support for queries?",
+    "ground_truth": "MAP v1 supports comprehensive querying and content analysis across English, Hindi, and Mandarin Chinese. Users can construct queries in any of the supported languages.",
+    "bu_filter": "product",
+    "source_lang": "en",
+    "expected_lang": "en",
+    "unanswerable": false
+  },
+  {
+    "id": "en_prod_002",
+    "question": "When did Meridian's GraphQL API reach general availability?",
+    "ground_truth": "Meridian's GraphQL API moved from beta to GA effective February 3, 2026. The GA release includes SDKs for Python 3.12, Node.js 22, and Java 21, plus interactive documentation via Apollo Studio.",
+    "bu_filter": "product",
+    "source_lang": "en",
+    "expected_lang": "en",
+    "unanswerable": false
+  },
+  {
+    "id": "en_prod_003",
+    "question": "What performance improvement does the GraphQL API offer over REST?",
+    "ground_truth": "Customers migrating from REST to the Meridian GraphQL API will receive a 40% reduction in payload size and a 55% improvement in response latency under load.",
+    "bu_filter": "product",
+    "source_lang": "en",
+    "expected_lang": "en",
+    "unanswerable": false
+  },
+  {
+    "id": "en_prod_004",
+    "question": "What is the maximum number of rows supported in CSV bulk export?",
+    "ground_truth": "The Meridian Platform v2.4 bulk CSV export supports up to 10 million rows per export. Exports are delivered via signed download URL (expires after 24 hours) or written to a configurable cloud storage bucket.",
+    "bu_filter": "product",
+    "source_lang": "en",
+    "expected_lang": "en",
+    "unanswerable": false
+  },
+  {
+    "id": "en_prod_005",
+    "question": "What is the Meridian REST API base URL?",
+    "ground_truth": "The base URL for all Meridian Platform REST API endpoints is https://api.meridianglobal.com. The API supports OAuth 2.0 Bearer Tokens and API Keys passed via the X-API-Key header.",
+    "bu_filter": "product",
+    "source_lang": "en",
+    "expected_lang": "en",
+    "unanswerable": false
+  },
+  {
+    "id": "en_prod_006",
+    "question": "How long do Meridian API OAuth tokens remain valid?",
+    "ground_truth": "OAuth 2.0 Bearer Tokens expire 24 hours after issuance. A 401 Unauthorized response is returned for expired or invalid tokens.",
+    "bu_filter": "product",
+    "source_lang": "en",
+    "expected_lang": "en",
+    "unanswerable": false
+  },
+  {
+    "id": "en_prod_007",
+    "question": "What is the SLA uptime guarantee for the Predictive Engine model serving endpoints?",
+    "ground_truth": "The Insights Predictive Engine (GA April 20, 2026) has a 99.5% uptime SLA for model serving endpoints.",
+    "bu_filter": "product",
+    "source_lang": "en",
+    "expected_lang": "en",
+    "unanswerable": false
+  },
+  {
+    "id": "en_prod_008",
+    "question": "What new AI feature was introduced in Meridian Platform v2.4?",
+    "ground_truth": "Meridian Platform v2.4 introduced AI Query Suggestions powered by a fine-tuned LLM trained on anonymized platform query logs. Internal tests show a 30% reduction in time-to-first-query for new users.",
+    "bu_filter": "product",
+    "source_lang": "en",
+    "expected_lang": "en",
+    "unanswerable": false
+  },
+  {
+    "id": "en_prod_009",
+    "question": "How many bugs were resolved in Meridian Platform v2.4?",
+    "ground_truth": "A total of 47 bugs were resolved in Meridian Platform v2.4, including a high-severity issue affecting query timeout behavior on very large datasets.",
+    "bu_filter": "product",
+    "source_lang": "en",
+    "expected_lang": "en",
+    "unanswerable": false
+  },
+  {
+    "id": "en_prod_010",
+    "question": "What identity providers does Meridian's SAML 2.0 integration support?",
+    "ground_truth": "Meridian's SAML 2.0 integration (launched March 17, 2026) supports Okta, Azure AD, OneLogin, and PingIdentity for IdP-initiated and SP-initiated flows.",
+    "bu_filter": "product",
+    "source_lang": "en",
+    "expected_lang": "en",
+    "unanswerable": false
+  },
+  {
+    "id": "en_prod_011",
+    "question": "What is the four strategic pillars breakdown in the 2026 product roadmap?",
+    "ground_truth": "The 2026 roadmap commits engineering resources to four strategic pillars: AI/ML capabilities (40%), platform reliability (30%), enterprise features (20%), and developer experience (10%).",
+    "bu_filter": "product",
+    "source_lang": "en",
+    "expected_lang": "en",
+    "unanswerable": false
+  },
+  {
+    "id": "en_prod_012",
+    "question": "What is Row-Level Security in Meridian Platform v2.4?",
+    "ground_truth": "Row-Level Security (RLS) in Meridian v2.4 allows administrators to define filter predicates per role enforced at query execution time. A maximum of 100 policies per workspace is supported.",
+    "bu_filter": "product",
+    "source_lang": "en",
+    "expected_lang": "en",
+    "unanswerable": false
+  },
+  {
+    "id": "zh_hr_001",
+    "question": "差旅报销政策的适用范围是什么？",
+    "ground_truth": "该政策适用于全球所有代表公司产生业务相关费用的全职、兼职和合同制员工，所有员工及其审批经理必须遵守。",
+    "bu_filter": "hr",
+    "source_lang": "zh",
+    "expected_lang": "zh",
+    "unanswerable": false
+  },
+  {
+    "id": "zh_hr_002",
+    "question": "员工行为准则的主要要求是什么？",
+    "ground_truth": "所有子午线员工须以尊重、专业和诚信的态度对待同事、客户和合作伙伴，营造包容、无歧视的工作环境，并在所有业务往来中展现诚实和责任感。",
+    "bu_filter": "hr",
+    "source_lang": "zh",
+    "expected_lang": "zh",
+    "unanswerable": false
+  },
+  {
+    "id": "zh_hr_003",
+    "question": "假期政策对兼职员工有何规定？",
+    "ground_truth": "兼职员工可能有资格根据当地法规和其具体劳动合同获得按比例计算的假期福利。",
+    "bu_filter": "hr",
+    "source_lang": "zh",
+    "expected_lang": "zh",
+    "unanswerable": false
+  },
+  {
+    "id": "zh_hr_004",
+    "question": "报销政策的例外情况需要谁批准？",
+    "ground_truth": "费用报销政策的任何例外情况都需要副总裁或更高级别管理人员事先书面批准。",
+    "bu_filter": "hr",
+    "source_lang": "zh",
+    "expected_lang": "zh",
+    "unanswerable": false
+  },
+  {
+    "id": "zh_hr_005",
+    "question": "带薪年假有何用途？",
+    "ground_truth": "带薪年假（也称为Earned Leave）为员工提供用于休息、娱乐和个人事务的带薪假期。",
+    "bu_filter": "hr",
+    "source_lang": "zh",
+    "expected_lang": "zh",
+    "unanswerable": false
+  },
+  {
+    "id": "zh_prod_001",
+    "question": "Meridian Analytics Platform v1支持哪些查询语言？",
+    "ground_truth": "MAP v1支持英语、印地语和普通话中文的综合查询和内容分析，用户可以使用任何支持的语言构建查询。",
+    "bu_filter": "product",
+    "source_lang": "zh",
+    "expected_lang": "zh",
+    "unanswerable": false
+  },
+  {
+    "id": "zh_prod_002",
+    "question": "2026年产品路线图的四大战略支柱是什么？",
+    "ground_truth": "2026年路线图将工程资源分配给四大战略支柱：AI/ML能力（40%）、平台可靠性（30%）、企业功能（20%）和开发者体验（10%）。",
+    "bu_filter": "product",
+    "source_lang": "zh",
+    "expected_lang": "zh",
+    "unanswerable": false
+  },
+  {
+    "id": "zh_prod_003",
+    "question": "Meridian平台v2.4的AI查询建议功能有何作用？",
+    "ground_truth": "AI查询建议功能由经过微调的大语言模型提供支持，内部测试显示新用户的首次查询时间减少30%。",
+    "bu_filter": "product",
+    "source_lang": "zh",
+    "expected_lang": "zh",
+    "unanswerable": false
+  },
+  {
+    "id": "zh_prod_004",
+    "question": "Meridian REST API的基础URL是什么？",
+    "ground_truth": "Meridian Platform REST API的所有端点的基础URL为https://api.meridianglobal.com。",
+    "bu_filter": "product",
+    "source_lang": "zh",
+    "expected_lang": "zh",
+    "unanswerable": false
+  },
+  {
+    "id": "zh_prod_005",
+    "question": "Meridian API密钥是否会过期？",
+    "ground_truth": "API密钥不会过期，但可以通过Meridian Admin Console随时撤销。",
+    "bu_filter": "product",
+    "source_lang": "zh",
+    "expected_lang": "zh",
+    "unanswerable": false
+  },
+  {
+    "id": "hi_hr_001",
+    "question": "यात्रा व्यय नीति किन कर्मचारियों पर लागू होती है?",
+    "ground_truth": "यह नीति Meridian Global Corp के सभी पूर्णकालिक, अंशकालिक और अनुबंध कर्मचारियों पर लागू होती है जो कंपनी की ओर से व्यावसायिक खर्च उठाते हैं।",
+    "bu_filter": "hr",
+    "source_lang": "hi",
+    "expected_lang": "hi",
+    "unanswerable": false
+  },
+  {
+    "id": "hi_hr_002",
+    "question": "व्यय नीति के अपवाद के लिए किसकी मंजूरी आवश्यक है?",
+    "ground_truth": "व्यय नीति के किसी भी अपवाद के लिए उपाध्यक्ष या उच्च अधिकारी की पूर्व लिखित अनुमति आवश्यक है।",
+    "bu_filter": "hr",
+    "source_lang": "hi",
+    "expected_lang": "hi",
+    "unanswerable": false
+  },
+  {
+    "id": "hi_hr_003",
+    "question": "Meridian का आचार संहिता कर्मचारियों के लिए अनिवार्य है?",
+    "ground_truth": "हां, आचार संहिता का पालन Meridian Global Corp में रोजगार की एक शर्त है।",
+    "bu_filter": "hr",
+    "source_lang": "hi",
+    "expected_lang": "hi",
+    "unanswerable": false
+  },
+  {
+    "id": "hi_hr_004",
+    "question": "अर्जित अवकाश का उपयोग किस लिए किया जाता है?",
+    "ground_truth": "अर्जित अवकाश (Earned Leave) कर्मचारियों को आराम, मनोरंजन और व्यक्तिगत कार्यों के लिए सवैतनिक समय प्रदान करता है।",
+    "bu_filter": "hr",
+    "source_lang": "hi",
+    "expected_lang": "hi",
+    "unanswerable": false
+  },
+  {
+    "id": "hi_hr_005",
+    "question": "Meridian में कर्मचारी के व्यवहार के लिए क्या मानक निर्धारित हैं?",
+    "ground_truth": "सभी Meridian कर्मचारियों से अपेक्षा की जाती है कि वे सहकर्मियों, ग्राहकों और भागीदारों के साथ सम्मान और व्यावसायिकता के साथ व्यवहार करें, और सभी व्यावसायिक कार्यों में ईमानदारी और जवाबदेही प्रदर्शित करें।",
+    "bu_filter": "hr",
+    "source_lang": "hi",
+    "expected_lang": "hi",
+    "unanswerable": false
+  },
+  {
+    "id": "hi_en_001",
+    "question": "पासवर्ड की न्यूनतम लंबाई क्या होनी चाहिए?",
+    "ground_truth": "Meridian Global Corp के सिस्टम पर पासवर्ड की न्यूनतम लंबाई बारह (12) अक्षर होनी चाहिए।",
+    "bu_filter": "it_security",
+    "source_lang": "en",
+    "expected_lang": "hi",
+    "unanswerable": false
+  },
+  {
+    "id": "hi_en_002",
+    "question": "P1 साइबर सुरक्षा घटना पर प्रतिक्रिया समय कितना है?",
+    "ground_truth": "P1 क्रिटिकल घटनाओं के लिए 15 मिनट के भीतर सक्रिय प्रतिक्रिया और CISO को सूचित करना आवश्यक है।",
+    "bu_filter": "it_security",
+    "source_lang": "en",
+    "expected_lang": "hi",
+    "unanswerable": false
+  },
+  {
+    "id": "hi_en_003",
+    "question": "GraphQL API कब से सामान्य उपलब्धता में आया?",
+    "ground_truth": "Meridian का GraphQL API 3 फरवरी 2026 से सामान्य उपलब्धता में आया, जिसमें Python 3.12, Node.js 22 और Java 21 के लिए SDK शामिल हैं।",
+    "bu_filter": "product",
+    "source_lang": "en",
+    "expected_lang": "hi",
+    "unanswerable": false
+  },
+  {
+    "id": "hi_en_004",
+    "question": "CSV बल्क एक्सपोर्ट में अधिकतम कितनी पंक्तियाँ निर्यात की जा सकती हैं?",
+    "ground_truth": "Meridian Platform v2.4 में बल्क CSV एक्सपोर्ट प्रति एक्सपोर्ट अधिकतम 1 करोड़ (10 मिलियन) पंक्तियों का समर्थन करता है।",
+    "bu_filter": "product",
+    "source_lang": "en",
+    "expected_lang": "hi",
+    "unanswerable": false
+  },
+  {
+    "id": "hi_en_005",
+    "question": "नए उपयोगकर्ता खाते के लिए IT विभाग को कितने समय में प्रावधान करना होता है?",
+    "ground_truth": "अनुमोदित और दस्तावेज़ीकृत IT सेवा टिकट प्राप्त होने पर IT विभाग को 24 व्यावसायिक घंटों के भीतर पहुँच प्रदान करना अनिवार्य है।",
+    "bu_filter": "it_security",
+    "source_lang": "en",
+    "expected_lang": "hi",
+    "unanswerable": false
+  },
+  {
+    "id": "en_zh_001",
+    "question": "What does the Chinese version of the expense policy say about exceptions?",
+    "ground_truth": "According to the Chinese expense policy document, any exceptions require prior written approval from a Vice President or higher authority at Meridian Global Corp.",
+    "bu_filter": "hr",
+    "source_lang": "zh",
+    "expected_lang": "en",
+    "unanswerable": false
+  },
+  {
+    "id": "en_zh_002",
+    "question": "What languages does the Chinese Meridian product spec describe support for?",
+    "ground_truth": "The Meridian Analytics Platform v1 product spec sheet describes support for English, Hindi, and Mandarin Chinese for cross-lingual data queries.",
+    "bu_filter": "product",
+    "source_lang": "zh",
+    "expected_lang": "en",
+    "unanswerable": false
+  },
+  {
+    "id": "en_zh_003",
+    "question": "What does the Chinese HR leave policy say about part-time employees?",
+    "ground_truth": "The Chinese leave policy states that part-time employees may be eligible for pro-rated leave benefits according to local regulations and their specific employment contracts.",
+    "bu_filter": "hr",
+    "source_lang": "zh",
+    "expected_lang": "en",
+    "unanswerable": false
+  },
+  {
+    "id": "en_zh_004",
+    "question": "What is the strategic engineering breakdown in the Chinese 2026 product roadmap?",
+    "ground_truth": "The 2026 roadmap allocates engineering capacity to four pillars: AI/ML capabilities at 40%, platform reliability at 30%, enterprise features at 20%, and developer experience at 10%.",
+    "bu_filter": "product",
+    "source_lang": "zh",
+    "expected_lang": "en",
+    "unanswerable": false
+  },
+  {
+    "id": "en_zh_005",
+    "question": "What does the Chinese incident response policy say about P1 incident escalation?",
+    "ground_truth": "According to the Chinese cybersecurity incident response policy, P1 Critical incidents require immediate notification to the CISO, Head of Legal, and the Executive Leadership Team within 15 minutes.",
+    "bu_filter": "it_security",
+    "source_lang": "zh",
+    "expected_lang": "en",
+    "unanswerable": false
+  },
+  {
+    "id": "zh_en_001",
+    "question": "Meridian系统密码的最低长度要求是多少？",
+    "ground_truth": "Meridian Global Corp系统的密码最低长度要求为12个字符，且必须包含大写字母、小写字母、数字和特殊符号中至少三类字符。",
+    "bu_filter": "it_security",
+    "source_lang": "en",
+    "expected_lang": "zh",
+    "unanswerable": false
+  },
+  {
+    "id": "zh_en_002",
+    "question": "Meridian GraphQL API正式发布的时间是什么？",
+    "ground_truth": "Meridian的GraphQL API于2026年2月3日正式发布（GA），提供了Python 3.12、Node.js 22和Java 21的SDK。",
+    "bu_filter": "product",
+    "source_lang": "en",
+    "expected_lang": "zh",
+    "unanswerable": false
+  },
+  {
+    "id": "zh_en_003",
+    "question": "P1关键网络安全事件的响应时间要求是什么？",
+    "ground_truth": "P1关键事件要求在15分钟内启动积极响应并上报给CISO，同时立即通知法务负责人和执行领导团队。",
+    "bu_filter": "it_security",
+    "source_lang": "en",
+    "expected_lang": "zh",
+    "unanswerable": false
+  },
+  {
+    "id": "zh_en_004",
+    "question": "Meridian员工行为准则对道德行为有何要求？",
+    "ground_truth": "Meridian员工行为准则要求所有员工以尊重和专业精神对待同事与客户，并在所有业务活动中展现诚实、正直和责任感。遵守行为准则是就业的条件。",
+    "bu_filter": "hr",
+    "source_lang": "en",
+    "expected_lang": "zh",
+    "unanswerable": false
+  },
+  {
+    "id": "zh_en_005",
+    "question": "Meridian平台v2.4发布了多少个错误修复？",
+    "ground_truth": "Meridian平台v2.4共解决了47个错误，包括一个影响大型数据集查询超时行为的高严重性问题。",
+    "bu_filter": "product",
+    "source_lang": "en",
+    "expected_lang": "zh",
+    "unanswerable": false
+  },
+  {
+    "id": "en_hi_001",
+    "question": "According to the Hindi expense policy, what is the purpose of the reimbursement guidelines?",
+    "ground_truth": "The Hindi expense policy aims to outline reimbursement guidelines for business expenses, promote fiscal responsibility, and clarify what constitutes a reimbursable item for Meridian Global Corp employees globally.",
+    "bu_filter": "hr",
+    "source_lang": "hi",
+    "expected_lang": "en",
+    "unanswerable": false
+  },
+  {
+    "id": "en_hi_002",
+    "question": "What does the Hindi IT access policy say about the scope of the access control policy?",
+    "ground_truth": "The Hindi IT access control policy covers all employees (full-time, part-time, contract), contractors, and third parties with access to Meridian's systems, regardless of global location.",
+    "bu_filter": "it_security",
+    "source_lang": "hi",
+    "expected_lang": "en",
+    "unanswerable": false
+  },
+  {
+    "id": "en_hi_003",
+    "question": "What does the Hindi code of conduct say about employee behavior standards?",
+    "ground_truth": "The Hindi code of conduct requires all Meridian employees to treat colleagues with respect and professionalism, foster an inclusive workplace, and demonstrate honesty, integrity, and accountability in all interactions.",
+    "bu_filter": "hr",
+    "source_lang": "hi",
+    "expected_lang": "en",
+    "unanswerable": false
+  },
+  {
+    "id": "cross_001",
+    "question": "What does Meridian's IT policy say about user provisioning, and how does the expense policy define exceptions?",
+    "ground_truth": "IT policy: new user accounts require manager authorization and an IT service ticket; provisioning must happen within 24 business hours. Expense policy: exceptions to reimbursement guidelines require prior written approval from a Vice President or higher authority.",
+    "bu_filter": "",
+    "source_lang": "en",
+    "expected_lang": "en",
+    "unanswerable": false
+  },
+  {
+    "id": "cross_002",
+    "question": "What is the Meridian code of conduct's position on employee integrity, and what does the IT access policy say about the least privilege principle?",
+    "ground_truth": "Code of conduct: employees must demonstrate honesty, integrity, and accountability in all interactions. IT access policy: employees are granted only the minimum access necessary to perform their duties (least privilege), subject to continuous monitoring.",
+    "bu_filter": "",
+    "source_lang": "en",
+    "expected_lang": "en",
+    "unanswerable": false
+  },
+  {
+    "id": "cross_003",
+    "question": "P2 साइबर घटना के लिए उत्तर समय क्या है और कौन सूचित किया जाता है?",
+    "ground_truth": "P2 High घटनाओं के लिए 1 घंटे में सक्रिय प्रतिक्रिया आवश्यक है। CISO डॉ. एवेलिन रीड और संबंधित विभाग प्रमुखों को सूचित किया जाता है।",
+    "bu_filter": "it_security",
+    "source_lang": "en",
+    "expected_lang": "hi",
+    "unanswerable": false
+  },
+  {
+    "id": "cross_004",
+    "question": "What is the Meridian Mobile Beta launch date and supported platforms?",
+    "ground_truth": "The Meridian Mobile Beta launched March 31, 2026, supporting iOS 17+ and Android 14+. Initial features include push notifications, approval workflows, real-time dashboard views, and biometric authentication.",
+    "bu_filter": "product",
+    "source_lang": "en",
+    "expected_lang": "en",
+    "unanswerable": false
+  },
+  {
+    "id": "cross_005",
+    "question": "Meridian v2.4 में Column Masking कैसे काम करता है?",
+    "ground_truth": "Meridian v2.4 में Column Masking संवेदनशील स्तंभों को भूमिका-आधारित नीतियों के तहत मास्क करता है, जो सभी निर्यात और विज़ुअलाइज़ेशन आउटपुट पर लागू होता है। इसके लिए Governance Admin भूमिका की आवश्यकता होती है।",
+    "bu_filter": "product",
+    "source_lang": "en",
+    "expected_lang": "hi",
+    "unanswerable": false
+  },
+  {
+    "id": "unans_001",
+    "question": "What is the CEO's personal home address?",
+    "ground_truth": "This information is not available in the Meridian knowledge base.",
+    "bu_filter": "",
+    "source_lang": "en",
+    "expected_lang": "en",
+    "unanswerable": true
+  },
+  {
+    "id": "unans_002",
+    "question": "What is Meridian's stock price as of today?",
+    "ground_truth": "This information is not available in the Meridian knowledge base.",
+    "bu_filter": "",
+    "source_lang": "en",
+    "expected_lang": "en",
+    "unanswerable": true
+  },
+  {
+    "id": "unans_003",
+    "question": "What is the quarterly dividend for Meridian stock in Q4 2025?",
+    "ground_truth": "This information is not available in the Meridian knowledge base.",
+    "bu_filter": "",
+    "source_lang": "en",
+    "expected_lang": "en",
+    "unanswerable": true
+  },
+  {
+    "id": "unans_004",
+    "question": "What are the personal email addresses of the CISO and the Head of Legal?",
+    "ground_truth": "This information is not available in the Meridian knowledge base.",
+    "bu_filter": "",
+    "source_lang": "en",
+    "expected_lang": "en",
+    "unanswerable": true
+  },
+  {
+    "id": "unans_005",
+    "question": "What is Meridian Global Corp's market capitalization?",
+    "ground_truth": "This information is not available in the Meridian knowledge base.",
+    "bu_filter": "",
+    "source_lang": "en",
+    "expected_lang": "en",
+    "unanswerable": true
+  },
+  {
+    "id": "en_hr_011",
+    "question": "What standard of communication does the Code of Conduct require?",
+    "ground_truth": "Meridian employees are expected to champion open communication, constructive feedback, and collaborative teamwork across all global offices.",
+    "bu_filter": "hr",
+    "source_lang": "en",
+    "expected_lang": "en",
+    "unanswerable": false
+  },
+  {
+    "id": "en_it_009",
+    "question": "What must a manager do before an IT service ticket is raised for a new user?",
+    "ground_truth": "The user direct manager or a designated department head must initiate and authorize all requests for new accounts or changes to access privileges, signifying the business need for the requested access.",
+    "bu_filter": "it_security",
+    "source_lang": "en",
+    "expected_lang": "en",
+    "unanswerable": false
+  },
+  {
+    "id": "en_prod_013",
+    "question": "What is Meridian Platform v2.4 version number and release date?",
+    "ground_truth": "Meridian Platform v2.4 (version 2.4.0) was released on September 15, 2026 (Document ID: MGC-REL-2026-Q3-2.4).",
+    "bu_filter": "product",
+    "source_lang": "en",
+    "expected_lang": "en",
+    "unanswerable": false
+  },
+  {
+    "id": "hi_en_006",
+    "question": "SOC लीड का नाम क्या है जो Meridian की घटना प्रतिक्रिया नीति में दिया गया है?",
+    "ground_truth": "Meridian की साइबर सुरक्षा घटना प्रतिक्रिया नीति में SOC लीड का नाम श्री अर्जुन सिंह है।",
+    "bu_filter": "it_security",
+    "source_lang": "en",
+    "expected_lang": "hi",
+    "unanswerable": false
+  },
+  {
+    "id": "hi_en_007",
+    "question": "Meridian के OAuth टोकन कितने घंटे के बाद समाप्त होते हैं?",
+    "ground_truth": "Meridian के OAuth 2.0 Bearer Token जारी होने के 24 घंटे बाद समाप्त हो जाते हैं।",
+    "bu_filter": "product",
+    "source_lang": "en",
+    "expected_lang": "hi",
+    "unanswerable": false
+  },
+  {
+    "id": "zh_en_006",
+    "question": "Meridian的行为准则对违规行为有何规定？",
+    "ground_truth": "Meridian员工行为准则规定，违反行为准则可能导致纪律处分，严重违规可能导致终止合同。所有员工和管理人员必须遵守。",
+    "bu_filter": "hr",
+    "source_lang": "en",
+    "expected_lang": "zh",
+    "unanswerable": false
+  },
+  {
+    "id": "zh_en_007",
+    "question": "Meridian 2026年路线图第一季度的主要功能是什么？",
+    "ground_truth": "2026年Q1主要功能包括：GraphQL API正式发布（2月3日）、SAML 2.0 SSO集成（3月17日）和移动应用Beta版（3月31日，支持iOS 17+和Android 14+）。",
+    "bu_filter": "product",
+    "source_lang": "en",
+    "expected_lang": "zh",
+    "unanswerable": false
+  },
+  {
+    "id": "en_hi_004",
+    "question": "What does the Hindi leave policy say about local statutory requirements?",
+    "ground_truth": "According to the Hindi leave policy, where local statutory requirements or collective bargaining agreements provide superior benefits, those provisions will supersede the global Meridian Leave and Attendance Policy.",
+    "bu_filter": "hr",
+    "source_lang": "hi",
+    "expected_lang": "en",
+    "unanswerable": false
+  },
+  {
+    "id": "cross_006",
+    "question": "What is the Predictive Engine release date and uptime SLA from the product roadmap?",
+    "ground_truth": "The Insights Predictive Engine reached GA on April 20, 2026, with a 99.5% uptime SLA for model serving endpoints.",
+    "bu_filter": "product",
+    "source_lang": "en",
+    "expected_lang": "en",
+    "unanswerable": false
+  },
+  {
+    "id": "cross_007",
+    "question": "2026 रोडमैप के Q1 में कौन से मुख्य फीचर लॉन्च हुए?",
+    "ground_truth": "2026 के Q1 में GraphQL API (2 फरवरी 2026), SAML 2.0 SSO इंटीग्रेशन (17 मार्च 2026) और Meridian Mobile Beta (31 मार्च 2026) लॉन्च हुए।",
+    "bu_filter": "product",
+    "source_lang": "en",
+    "expected_lang": "hi",
+    "unanswerable": false
+  }
+]
