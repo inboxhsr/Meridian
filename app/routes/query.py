@@ -1,9 +1,9 @@
 """
-app/routes/query.py — Sprint 4
+app/routes/query.py — Sprint 5
 
-POST /query — full RAG pipeline endpoint.
+POST /query — LangGraph agentic pipeline endpoint.
 
-Flow: route → retrieve → generate → respond
+Flow: intent_classifier → [query_rewriter] → retriever → critic → [loop] → generator | abstainer
 """
 
 import sys
@@ -13,9 +13,7 @@ from fastapi import APIRouter, HTTPException
 sys.path.insert(0, str(Path(__file__).parent.parent.parent))
 
 from app.models import QueryRequest, QueryResponse, ChunkHit
-from pipeline.router    import route
-from pipeline.retriever import retrieve
-from pipeline.generator import generate
+from pipeline.graph import graph
 
 router = APIRouter()
 
@@ -27,40 +25,51 @@ router = APIRouter()
 )
 async def query_endpoint(request: QueryRequest) -> QueryResponse:
     """
-    Runs the full RAG pipeline:
+    Runs the full LangGraph agentic RAG pipeline:
 
-    1. **Route** — detect language, check PII, apply BU filter
-    2. **Retrieve** — embed query, ANN search Milvus top-K chunks
-    3. **Generate** — build grounded prompt, call DeepSeek, return cited answer
-
-    Audio chunks (MP3 transcriptions) are included after Sprint 4 re-ingest.
+    1. **Intent Classifier** — detect language, check PII, classify intent
+    2. **Query Rewriter** — decompose compound queries into sub-questions (multi_hop only)
+    3. **Retriever** — embed + ANN search Milvus, deduplicate across sub-questions
+    4. **Critic** — grade retrieved context; retry or abstain if insufficient
+    5. **Generator** — grounded answer with citations (DeepSeek)
+       OR **Abstainer** — honest no-answer after max rounds or out-of-scope
     """
     try:
-        # 1. Route
-        routing = route(
-            request.query,
-            bu_filter=request.bu,
-            skip_pii=request.skip_pii,
-        )
+        initial_state = {
+            "query":              request.query,
+            "bu_filter":          request.bu,
+            "top_k":              request.top_k,
+            # Fields populated by nodes — provide defaults so TypedDict is satisfied
+            "lang":               "en",
+            "intent":             "",
+            "safe_query":         request.query,
+            "pii_flagged":        False,
+            "sub_questions":      [],
+            "chunks":             [],
+            "retrieval_round":    0,
+            "groundedness_score": 0.0,
+            "relevance_score":    0.0,
+            "verdict":            "",
+            "critic_reasoning":   "",
+            "answer":             "",
+            "sources":            [],
+            "chunks_used":        0,
+            "abstained":          False,
+        }
 
-        # 2. Retrieve
-        chunks = retrieve(
-            routing["safe_query"],
-            top_k=request.top_k,
-            bu_filter=routing["bu_filter"],
-        )
+        result = graph.invoke(initial_state)
 
-        # 3. Generate
-        result = generate(routing["safe_query"], chunks, lang=routing["lang"])
+        chunks = result.get("chunks", [])
+        top_k = request.top_k
 
         return QueryResponse(
-            query=routing["query"],
-            safe_query=routing["safe_query"],
-            lang=routing["lang"],
-            pii_flagged=routing["pii_flagged"],
-            answer=result["answer"],
-            sources=result["sources"],
-            chunks_used=result["chunks_used"],
+            query=result.get("query", request.query),
+            safe_query=result.get("safe_query", request.query),
+            lang=result.get("lang", "en"),
+            pii_flagged=result.get("pii_flagged", False),
+            answer=result.get("answer", ""),
+            sources=result.get("sources", []),
+            chunks_used=result.get("chunks_used", 0),
             hits=[
                 ChunkHit(
                     source_file=c["source_file"],
@@ -69,7 +78,7 @@ async def query_endpoint(request: QueryRequest) -> QueryResponse:
                     modality=c["modality"],
                     score=round(c["score"], 6),
                 )
-                for c in chunks
+                for c in chunks[:top_k]
             ],
         )
 
