@@ -4,7 +4,7 @@
 # ============================================================
 
 # --- Milvus ---
-pymilvus>=2.6.0
+pymilvus>=2.4.4
 
 # --- Gemini API (PII Redactor + Router + Embedding) ---
 google-genai>=1.0.0
